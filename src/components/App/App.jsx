@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux/es/exports";
-import { addTodo } from "../../store/todoSlice";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux/es/exports";
+import { addNewTodo, fetchTodos } from "../../store/todoSlice";
 
 import { InputField } from "components/InputField/InputField";
 import { TodoList } from "components/TodoList/TodoList";
@@ -8,12 +8,17 @@ import styles from "./App.module.css";
 
 export const App = () => {
   const [ text, setText ] = useState("");
+  const { status, error } = useSelector(state => state.todos)
   const dispatch = useDispatch();
 
   const addTask = () => {
-    dispatch(addTodo({text}))
+    dispatch(addNewTodo(text))
     setText("")
   }
+
+  useEffect(() => {
+    dispatch(fetchTodos());
+  },[dispatch])
 
   return (
     <div
@@ -25,7 +30,10 @@ export const App = () => {
         handleSubmit={addTask}
       />
 
-      <TodoList/>
+      {status === "pending" && <h2>Loading...</h2>}
+      {error && <h2>An error occured: {error}</h2>}
+      {status === "resolved" && <TodoList/>}
+      
     </div>
   );
 };
