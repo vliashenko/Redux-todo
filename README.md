@@ -1,2 +1,2 @@
-React-Redux simple todo app without styles. <br>
-redux-slice, useDispatch, useSelector
+React-Redux todo app using jsonplaceholder. CRUD operations <br>
+
